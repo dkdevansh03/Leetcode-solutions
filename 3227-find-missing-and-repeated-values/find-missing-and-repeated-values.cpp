@@ -2,22 +2,22 @@ class Solution {
 public:
     vector<int> findMissingAndRepeatedValues(vector<vector<int>>& grid) {
         int n = grid.size();
-        unordered_map<int, int> freq;
-        vector<int> ans;
+        vector<int> hash(n * n + 1, 0);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int num = grid[i][j];
-                freq[num]++;
+                hash[num]++;
             }
         }
-        for (auto it : freq) {
-            if (it.second > 1)
-                ans.push_back(it.first);
+        int repeating = -1, missing = -1;
+        for (int i = 1; i <= n * n; i++) {
+            if (hash[i] == 2)
+                repeating = i;
+            else if (hash[i] == 0)
+                missing = i;
+            if (repeating != -1 && missing != -1)
+                break;
         }
-        for (int i = 1; i <= n*n; i++) {
-            if (freq.find(i) == freq.end())
-                ans.push_back(i);
-        }
-        return ans;
+        return {repeating, missing};
     }
 };
